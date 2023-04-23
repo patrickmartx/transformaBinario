@@ -24,40 +24,46 @@ def binaryToDecimal(values):
     return decimals
 
 
-def sumOp(val1, val2, base=32):
+def sumOp(val1, val2="1" + "0"*31, base=32):
+    print("repeticao")
+    print("-")
     valResulado = ''
-    val3 = ["0"]
-    for i in range(0, base - 1):
-        # Caso onde os dois binários comparados são 0
-        if val1[i] == val2[i] == val3[i] == "0":
-            valResulado += "0"
-            val3.append("0")
-        # Caso onde os dois binários comparados são 0 e o valor anterior tinha dado 10
-        elif val1[i] == val2[i] == "0" and val3[i] == "1":
-            valResulado += "1"
-            val3.append("0")
-        # Caso onde: o primeiro bininário seja um e o segundo seja zero ou o primeiro seja zero e o segundo seja um, mas o anterior resultou em 10
-        elif (val1[i] == val3[i] == "1" and val2[i] == "0") or (val2[i] == val3[i] == "1" and val1[1] == "0"):
-            valResulado += "1"
-            val3.append("0")
-        # Caso apenas um dos valores comparado seja um, e o anterior não tenha resultado em 10.
-        elif (val1[i] == val3[i] == "0" and val2[i] == "1") or (val2[i] == val3[i] == "0" and val1[1] == "1"):
-            valResulado += "1"
-            val3.append("0")
-        # Caso onde os valores comparados ambos são 1, e o anterior não resultou em 10.
-        elif val1[i] == val2[i] == "1" and val3[i] == "0":
-            valResulado += "0"
-            val3.append("1")
-        # Caso onde os valores comparados ambos são 1, e o anterior resultou em 10.
-        elif val1[i] == val2[i] == val3[i] == "1":
-            valResulado += "0"
-            val3.append("1")
+    aux = 0
+    for i in range(0, base-1):
+        if val1[i] == val2[i] == "0":
+            if aux == 1:
+                valResulado += "1"
+                aux = 0
+            else:
+                valResulado += "0"
+                aux = 0
+        elif (val1[i] == "1" and val2[i] == "0") or (val1[i] == "0" and val2[i] == "1"):
+            if aux == 1:
+                valResulado += "0"
+                aux = 1
+            else:
+                valResulado += "1"
+                aux = 0
+        elif val1[i] == val2[i] == "1":
+            if aux == 1:
+                valResulado += "1"
+                aux = 1
+            else:
+                valResulado += "0"
+                aux = 1
     return valResulado[::-1]
 
 
 def tratarNegativo(val):
+    newVal = ""
+    for char in val:
+        if char == "0":
+            newVal += "1"
+        else:
+            newVal += "0"
+    newVal = sumOp(newVal[::-1])
+    return newVal
 
-    return None
 
 def sumbin(value, base=32):
     sinal1 = value[0][0]
@@ -70,6 +76,7 @@ def sumbin(value, base=32):
     #Caso o primeiro seja negativo e o segundo positivo
     elif sinal1 == "1" and sinal2 == "0":
         decimal = binaryToDecimal(value)
+        tratarNegativo(value[1])
         for i in range(0, len(decimal)):
             if decimal[i] < 0:
                 decimal[i] *= -1
