@@ -1,16 +1,17 @@
 from utils.files import readFile
-from utils.binary import binaryToDecimal, sumbin, subtractbin
+from utils.binary import binaryToDecimal, sumBin#, subtractBin
 
 values = readFile('entrada.txt')
 decimal = binaryToDecimal(values)
-binarySum = sumbin(values)
-binarySubtract = subtractbin(values)
+binarySum = sumBin(values)
+#binarySubtract = subtractbin(values)
 
 print('')
 for index in values:
     print(index)
-print()
+'''print()
 for index in decimal:
     print(index)
-print()
+
+print()'''
 print(binarySum)
