@@ -95,15 +95,19 @@ def sumBin(value):
     sinal2 = value[1][0]
 
     if sinal1 == sinal2:
+        # (positivo + positivo) ou (negativo + negativo)
         valResultado = somar(value[0][1:], value[1][1:], base=31)
         valResultado = sinal1 + valResultado
         return valResultado
     else:
+        # (positivo + negativo) ou (negativo + positivo)
         valResultado = subtrair(value[0][1:], value[1][1:], base=31)
         compare = binaryToDecimal([value[0][1:], value[1][1:]])
         if compare[0] > compare[1]:
+            # positivo maior + negativo menor
             valResultado = sinal1 + valResultado
         else:
+            # negativo maior + positivo menor
             valResultado = sinal2 + valResultado
         return valResultado
 
