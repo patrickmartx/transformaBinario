@@ -1,4 +1,4 @@
-def binaryToDecimal(values, base=32):
+def binaryToDecimalSM(values, base=32):
     decimals = []
     reverseValue = []
     for index in range(0, len(values)):
@@ -15,16 +15,6 @@ def binaryToDecimal(values, base=32):
                 decimals.append(num * -1)
     del reverseValue
     return decimals
-
-
-def tratarNegativo(val):
-    switch = ""
-    for i in range(0, len(val)):
-        if val[i] == "0":
-            switch += "1"
-        elif val[i] == "1":
-            switch += "0"
-    return switch
 
 
 def somar(val1, val2, base=32):
@@ -90,7 +80,7 @@ def subtrair(val1, val2, base=32):
                 carry = True
     return valResulado[::-1]
 
-def sumBin(value):
+def sumBinSM(value):
     sinal1 = value[0][0]
     sinal2 = value[1][0]
 
@@ -102,7 +92,7 @@ def sumBin(value):
     else:
         # (positivo + negativo) ou (negativo + positivo)
         valResultado = subtrair(value[0][1:], value[1][1:], base=31)
-        compare = binaryToDecimal([value[0][1:], value[1][1:]])
+        compare = binaryToDecimalSM([value[0][1:], value[1][1:]])
         if compare[0] > compare[1]:
             # positivo maior + negativo menor
             valResultado = sinal1 + valResultado
@@ -112,10 +102,10 @@ def sumBin(value):
         return valResultado
 
 
-def subtractBin(value):
+def subtractBinSM(value):
     sinal1 = value[0][0]
     sinal2 = value[1][0]
-    compare = binaryToDecimal([value[0][1:], value[1][1:]])
+    compare = binaryToDecimalSM([value[0][1:], value[1][1:]])
 
     if sinal1 == sinal2 == "0":
         # positivo - positivo
@@ -165,3 +155,50 @@ def subtractBin(value):
             valResultado = somar(value[0][1:], value[1][1:], base=31)
             valResultado = sinal2 + valResultado"""
         return valResultado
+
+
+def modificaNegativos(values):
+    sinal1 = values[0][0]
+    sinal2 = values[1][0]
+    valuesC2 = []
+    if sinal1 == "1":
+        valuesC2.append(tratarNegativo(values[0]))
+    else:
+        valuesC2.append(values[0])
+    if sinal2 == "1":
+        valuesC2.append(tratarNegativo(values[1]))
+    else:
+        valuesC2.append(values[1])
+    return valuesC2
+
+
+def tratarNegativo(val):
+    switch = ""
+    for i in range(0, len(val)):
+        if val[i] == "0":
+            switch += "1"
+        elif val[i] == "1":
+            switch += "0"
+    c2negative = somar(switch, ("0"*31 + "1"))
+    return c2negative
+
+def binaryToDecimalC2(values, base=32):
+    valuesC2 = modificaNegativos(values)
+    C2decimals = binaryToDecimalSM(valuesC2)
+
+    for i in range(0, len(C2decimals)):
+        if values[i] != valuesC2[i]:
+            C2decimals[i] *= -1
+
+    del valuesC2
+    return C2decimals
+
+
+def sumBinC2(values):
+    values = modificaNegativos(values)
+    return somar(values[0], values[1])
+
+
+def subtractBinC2(values):
+    values = modificaNegativos(values)
+    return subtrair(values[0], values[1])
