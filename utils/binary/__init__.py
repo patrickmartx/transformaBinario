@@ -1,210 +1,163 @@
-def binaryToDecimal(values):
-    '''
-    :param values:
-    :return:
-    '''
+def binaryToDecimal(values, base=32):
     decimals = []
-    reverseValue = values[:]
+    reverseValue = []
     for index in range(0, len(values)):
         num = 0
-        sinal = values[index][0]
-        reverseValue[index] = values[index][:0:-1]
+        reverseValue.append(values[index][:0:-1])
         for i in range(0, len(reverseValue[index])):
             if reverseValue[index][i] == '1':
                 num += 2 ** i
-        if sinal == '0':
-            decimals.append(num)
-        elif sinal == '1':
-            decimals.append(num * -1)
-
+        if base == 32:
+            sinal = values[index][0]
+            if sinal == '0':
+                decimals.append(num)
+            elif sinal == '1':
+                decimals.append(num * -1)
     del reverseValue
     return decimals
 
 
-def sumBin(value, base=32):
-    """
-
-    :type value: object
-    """
-    sinal1 = value[0][0]
-    sinal2 = value[1][0]
-    val1 = value[0][::-1]
-    val2 = value[1][::-1]
-    valoresEmDecimal = binaryToDecimal(value)
-
-    if sinal1 == sinal2:
-        valResulado = ''
-        aux = 0
-        for i in range(0, base - 1):
-            if val1[i] == val2[i] == "0":
-                if aux == 1:
-                    valResulado += "1"
-                    aux = 0
-                else:
-                    valResulado += "0"
-                    aux = 0
-            elif (val1[i] == "1" and val2[i] == "0") or (val1[i] == "0" and val2[i] == "1"):
-                if aux == 1:
-                    valResulado += "0"
-                    aux = 1
-                else:
-                    valResulado += "1"
-                    aux = 0
-            elif val1[i] == val2[i] == "1":
-                if aux == 1:
-                    valResulado += "1"
-                    aux = 1
-                else:
-                    valResulado += "0"
-                    aux = 1
-        if sinal1 == sinal2 == "0":
-            valResulado = "0" + valResulado[::-1]
-        else:
-            valResulado = "1" + valResulado[::-1]
-        return valResulado
-
-    elif sinal1 == "0" and sinal2 == "1":
-        if valoresEmDecimal[0] > valoresEmDecimal[1]:
-            return subtractBin(value)
+def tratarNegativo(val):
+    switch = ""
+    for i in range(0, len(val)):
+        if val[i] == "0":
+            switch += "1"
+        elif val[i] == "1":
+            switch += "0"
+    return switch
 
 
-def subtractBin(value, base=32):
-    aux = 0
-    val = ''
-    val1 = value[0][::-1]
-    val2 = value[1][::-1]
-    for i in range(0, base-1):
-        if val1[i] == val2[i] == "0":
-            val += "0"
-        elif val1[i] == val2[i] == "1":
-            val += "0"
-        elif val1 == "1" and val2 == "0":
-            val += "1"
-    return val
-
-
-""" Caso os dois sejam positivo
-    if sinal1 == sinal2 == "0":
-        result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    #Caso o primeiro seja negativo e o segundo positivo
-    elif sinal1 == "1" and sinal2 == "0":
-        decimal = binaryToDecimal(value)
-        tratarNegativo(value[1])
-        for i in range(0, len(decimal)):
-            if decimal[i] < 0:
-                decimal[i] *= -1
-        if decimal[0] >= decimal[1]:
-            result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        else:
-            result = sinal2 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    # Caso o primeiro seja positivo e o segundo negativo
-    elif sinal1 == "0" and sinal2 == "1":
-        decimal = binaryToDecimal(value)
-        for i in range(0, len(decimal)):
-            if decimal[i] < 0:
-                decimal[i] *= -1
-        if decimal[0] >= decimal[1]:
-            result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        else:
-            result = sinal2 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    # Caso os dois sejam negativos
-    else:
-        result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-'''
-
-def sumOp(val1, val2="1" + "0"*31, base=32):
-    print("repeticao")
-    print("-")
+def somar(val1, val2, base=32):
+    val1 = val1[::-1]
+    val2 = val2[::-1]
     valResulado = ''
-    aux = 0
-    for i in range(0, base-1):
-        if val1[i] == val2[i] == "0":
-            if aux == 1:
+    carry = False
+    for i in range(0, base):
+        if carry:
+            if val1[i] == val2[i] == "0":
                 valResulado += "1"
-                aux = 0
-            else:
+                carry = False
+            elif (val1[i] == "1" and val2[i] == "0") or (val1[i] == "0" and val2[i] == "1"):
                 valResulado += "0"
-                aux = 0
-        elif (val1[i] == "1" and val2[i] == "0") or (val1[i] == "0" and val2[i] == "1"):
-            if aux == 1:
-                valResulado += "0"
-                aux = 1
+                carry = True
             else:
                 valResulado += "1"
-                aux = 0
-        elif val1[i] == val2[i] == "1":
-            if aux == 1:
+                carry = True
+        else:
+            if val1[i] == val2[i] == "0":
+                valResulado += "0"
+                carry = False
+            elif (val1[i] == "1" and val2[i] == "0") or (val1[i] == "0" and val2[i] == "1"):
                 valResulado += "1"
-                aux = 1
+                carry = False
             else:
                 valResulado += "0"
-                aux = 1
+                carry = True
     return valResulado[::-1]
 
 
-def tratarNegativo(val):
-    newVal = ""
-    for char in val:
-        if char == "0":
-            newVal += "1"
+def subtrair(val1, val2, base=32):
+    val1 = val1[::-1]
+    val2 = val2[::-1]
+    valResulado = ''
+    carry = False
+    for i in range(0, base):
+        if carry:
+            if val1[i] == val2[i] == "0":
+                valResulado += "0"
+                carry = True
+            elif val1[i] == val2[i] == "1":
+                valResulado += "0"
+                carry = True
+            elif val1[i] == "1" and val2[i] == "0":
+                valResulado += "0"
+                carry = False
+            else:
+                valResulado += "0"
+                carry = True
         else:
-            newVal += "0"
-    newVal = sumOp(newVal[::-1])
-    return newVal
+            if val1[i] == val2[i] == "0":
+                valResulado += "0"
+                carry = False
+            elif val1[i] == val2[i] == "1":
+                valResulado += "0"
+                carry = True
+            elif val1[i] == "1" and val2[i] == "0":
+                valResulado += "1"
+                carry = False
+            else:
+                valResulado += "0"
+                carry = True
+    return valResulado[::-1]
 
-
-def sumbin(value, base=32):
+def sumBin(value):
     sinal1 = value[0][0]
     sinal2 = value[1][0]
 
-    #Caso os dois sejam positivo
+    if sinal1 == sinal2:
+        valResultado = somar(value[0][1:], value[1][1:], base=31)
+        valResultado = sinal1 + valResultado
+        return valResultado
+    else:
+        valResultado = subtrair(value[0][1:], value[1][1:], base=31)
+        compare = binaryToDecimal([value[0][1:], value[1][1:]])
+        if compare[0] > compare[1]:
+            valResultado = sinal1 + valResultado
+        else:
+            valResultado = sinal2 + valResultado
+        return valResultado
+
+
+def subtractBin(value):
+    sinal1 = value[0][0]
+    sinal2 = value[1][0]
+    compare = binaryToDecimal([value[0][1:], value[1][1:]])
+
     if sinal1 == sinal2 == "0":
-        result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    #Caso o primeiro seja negativo e o segundo positivo
-    elif sinal1 == "1" and sinal2 == "0":
-        decimal = binaryToDecimal(value)
-        tratarNegativo(value[1])
-        for i in range(0, len(decimal)):
-            if decimal[i] < 0:
-                decimal[i] *= -1
-        if decimal[0] >= decimal[1]:
-            result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
+        # positivo - positivo
+        if compare[0] > compare [1]:
+            # positivo maior - positivo menor
+            valResulado = subtrair(value[0][1:], value[1][1:], base=31)
+            valResulado = "0" + valResulado
+            return valResulado
         else:
-            result = sinal2 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    # Caso o primeiro seja positivo e o segundo negativo
+            # positivo menor - positivo maior
+            valResulado = subtrair(value[1][1:], value[0][1:], base=31)
+            valResulado = "1" + valResulado
+            return valResulado
+    elif sinal1 == sinal2 == "1":
+        # negativo - negativo
+        if compare[0] > compare[1]:
+            # negativo maior - negativo menor
+            valResultado = subtrair(value[0][1:], value[1][1:], base=31)
+            valResultado = "1" + valResultado
+            return valResultado
+        else:
+            # negativo menor - negativo maior
+            valResultado = subtrair(value[1][1:], value[0][1:], base=31)
+            valResultado = "0" + valResultado
+            return valResultado
     elif sinal1 == "0" and sinal2 == "1":
-        decimal = binaryToDecimal(value)
-        for i in range(0, len(decimal)):
-            if decimal[i] < 0:
-                decimal[i] *= -1
-        if decimal[0] >= decimal[1]:
-            result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
+        # positivo - negativo
+        valResultado = somar(value[0][1:], value[1][1:], base=31)
+        valResultado = sinal1 + valResultado
+        """compare = binaryToDecimal([value[0][1:], value[1][1:]])
+        if compare[0] > compare[1]:
+            valResultado = subtrair(value[0][1:], value[1][1:], base=31)
+            valResultado = sinal1 + valResultado
         else:
-            result = sinal2 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-    # Caso os dois sejam negativos
+            valResultado = subtrair(value[1][1:], value[0][1:], base=31)
+            valResultado = sinal2 + valResultado"""
+        return valResultado
     else:
-        result = sinal1 + sumOp(value[0][base:0:-1], value[1][base:0:-1])
-        return result
-
-
-def subtractbin(value):
-    val1 = value[0]
-    val2 = value[1]
-
-    '''if val1[0] == '0' and val2[0] == '0':
-        print("Os dois valores são pares")
-    elif val1[0] == '0' and val2[0] == '1':
-        print("Val1 é par e Val2 é impar")
-    elif val1[0] == '1' and val2[0] == '0':
-        print("Val1 é impar e Val2 é par")
-    else:
-        print("Os dois valores são ímpares")'''
-    return None
-"""
+        # negativo - positivo
+        valResultado = somar(value[0][1:], value[1][1:], base=31)
+        valResultado = sinal1 + valResultado
+        """compare = binaryToDecimal([value[0][1:], value[1][1:]])
+        if compare[0] > compare[1]:
+            valResultado = somar(value[0][1:], value[1][1:], base=31)
+            valResultado = sinal1 + valResultado
+        else:
+            valResultado = somar(value[0][1:], value[1][1:], base=31)
+            valResultado = sinal2 + valResultado"""
+        return valResultado
