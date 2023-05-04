@@ -47,14 +47,27 @@ def modifyNegative(val):
 
 
 def binaryToDecimalC2(values, base=32):
-    valuesC2 = findNegatives(values)
-    C2decimals = binaryToDecimalSM(valuesC2)
+    decimals = []
+    reverseValue = []
+    c2 = []
 
-    for i in range(0, len(C2decimals)):
-        if values[i] != valuesC2[i]:
-            C2decimals[i] *= -1
+    for index in range(0, len(values)):
+        sinal = values[index][0]
+        if values[index][0] == "1":
+            c2.append(modifyNegative(values[index]))
+        else:
+            c2.append(values[index])
+        num = 0
+        reverseValue.append(c2[index][::-1])
+        for i in range(0, len(reverseValue[index])):
+            if reverseValue[index][i] == '1':
+                num += 2 ** i
 
-    del valuesC2
-    return C2decimals
+        if base == 32:
+            if sinal == '0':
+                decimals.append(num)
+            elif sinal == '1':
+                decimals.append(num * -1)
 
-
+    del reverseValue
+    return decimals
