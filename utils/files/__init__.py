@@ -1,8 +1,4 @@
 def readFile(arch, base=32):
-    '''
-    :param arch: Nome do arquivo a ser lido.
-    :return: Lista de ítens encontrados no arquivo separado por linhas.
-    '''
     data = list()
     try:
         archive = open(arch, 'rt')
