@@ -60,4 +60,3 @@ def binSubtract(val1, val2, base=32):
                 valResult += "0"
                 carry = True
     return valResult[::-1]
-

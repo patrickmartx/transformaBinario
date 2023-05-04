@@ -124,5 +124,3 @@ def subtractBinC2(value):
         valResult = binSubtract(value[0][1:], value[1][1:], base=31)
         valResult = sinal1 + valResult
         return valResult
-
-
