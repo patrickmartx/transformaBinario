@@ -1,42 +1,42 @@
 from utils.files import readFile
-from utils.binary import binaryToDecimalSM, sumBinSM, subtractBinSM, binaryToDecimalC2, sumBinC2, subtractBinC2
+from utils.binary import *
 
+
+# Leitura do arquivo:
 values = readFile('entrada.txt')
 
+# Sinal e Magnitude:
 sm_to_decimal = binaryToDecimalSM(values)
+smSum = sumBinSM(values)
+smSubtract = subtractBinSM(values)
+smOperations = [smSum, smSubtract]
+smDecimalOp = binaryToDecimalSM(smOperations)
 
-binarySumSM = sumBinSM(values)
-binarySubtractSM = subtractBinSM(values)
-operations = [binarySumSM, binarySubtractSM]
-decimalOp = binaryToDecimalSM(operations)
-
+# Complemento a 2:
 c2_to_decimal = binaryToDecimalC2(values)
-
-binarySumC2 = sumBinC2(values)
-binarySubtractC2 = subtractBinC2(values)
-operations2 = [binarySumC2, binarySubtractC2]
-decimalOp2 = binaryToDecimalC2(operations2)
-
-
-
+c2Sum = sumBinC2(values)
+c2Subtract = subtractBinC2(values)
+c2Operations = [c2Sum, c2Subtract]
+c2DecimalOp = binaryToDecimalC2(c2Operations)
 
 # prints
-
+# SM
 for index in sm_to_decimal:
     print(index)
 print()
-for index in operations:
+for index in smOperations:
     print(index)
 print()
-for index in decimalOp:
+for index in smDecimalOp:
     print(index)
 print()
 
+# C2
 for index in c2_to_decimal:
     print(index)
 print()
-for index in operations2:
+for index in c2Operations:
     print(index)
 print()
-for index in decimalOp2:
+for index in c2DecimalOp:
     print(index)
