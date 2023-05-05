@@ -1,9 +1,9 @@
 from utils.files import readFile
 from utils.binary import *
-
+import sys
 
 # Leitura do arquivo:
-values = readFile('entrada.txt')
+values = readFile(sys.argv[1])
 
 # Sinal e Magnitude:
 sm_to_decimal = binaryToDecimalSM(values)
@@ -14,7 +14,7 @@ smDecimalOp = binaryToDecimalSM(smOperations)
 
 # Complemento a 2:
 c2_to_decimal = binaryToDecimalC2(values)
-c2Sum = sumBinC2(values)
+c2Sum = binSum(values[0], values[1])
 c2Subtract = subtractBinC2(values)
 c2Operations = [c2Sum, c2Subtract]
 c2DecimalOp = binaryToDecimalC2(c2Operations)
